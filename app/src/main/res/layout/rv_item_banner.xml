@@ -12,12 +12,17 @@
 
     <TextView
         android:id="@+id/tv_banner_title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#80000000"
         android:padding="8dp"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

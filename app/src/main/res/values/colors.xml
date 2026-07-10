@@ -3,4 +3,5 @@
     <color name="bg_theme">#FFFFFF</color>
     <color name="banner_indicator_normal">#80FFFFFF</color>
     <color name="banner_indicator_selected">#FFFFFF</color>
+    <color name="ic_launcher_background">#3F51B5</color>
 </resources>
