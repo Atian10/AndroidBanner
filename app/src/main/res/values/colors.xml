@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_theme">#FFFFFF</color>
+    <color name="banner_indicator_normal">#80FFFFFF</color>
+    <color name="banner_indicator_selected">#FFFFFF</color>
+</resources>

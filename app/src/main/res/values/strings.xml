@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AndroidBanner</string>
+    <string name="banner_image_desc">轮播图图片</string>
+</resources>
