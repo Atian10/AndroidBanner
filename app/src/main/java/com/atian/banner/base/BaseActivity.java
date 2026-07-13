@@ -1,13 +1,14 @@
 package com.atian.banner.base;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
+
+import com.atian.banner.util.LogUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -33,12 +34,12 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, getClass().getSimpleName() + " onCreate：  开始");
+        LogUtils.d(TAG, getClass().getSimpleName() + " onCreate：  开始");
         binding = createBinding();
         setContentView(binding.getRoot());
         initData();
         initView();
-        Log.d(TAG, getClass().getSimpleName() + " onCreate：  结束");
+        LogUtils.d(TAG, getClass().getSimpleName() + " onCreate：  结束");
     }
 
     /**
@@ -52,7 +53,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
             Method inflateMethod = bindingClass.getMethod("inflate", LayoutInflater.class);
             return (VB) inflateMethod.invoke(null, getLayoutInflater());
         } catch (Exception e) {
-            Log.e(TAG, "createBinding 反射失败：  " + e.getMessage(), e);
+            LogUtils.e(TAG, "createBinding 反射失败：  " + e.getMessage(), e);
             throw new RuntimeException("ViewBinding 创建失败", e);
         }
     }
@@ -72,7 +73,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, getClass().getSimpleName() + " onDestroy：  销毁");
+        LogUtils.d(TAG, getClass().getSimpleName() + " onDestroy：  销毁");
     }
 
     /**
