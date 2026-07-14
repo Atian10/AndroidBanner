@@ -9,6 +9,7 @@ jdk:
 before_install:
   - echo "JitPack 构建开始"
 
-# 构建命令：仅构建 :banner 模块的 Release AAR 并发布
+# 构建命令：使用 gradle-wrapper（先生成 wrapper 再执行构建）
 install:
+  - gradle wrapper --gradle-version 7.5
   - ./gradlew :banner:assembleRelease :banner:publishReleasePublicationToMavenLocal --no-daemon --no-parallel
