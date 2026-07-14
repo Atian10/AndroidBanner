@@ -32,11 +32,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.recyclerview:recyclerview:1.3.0'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'com.google.android.material:material:1.8.0'
+    // 依赖 :banner Library 模块（通过 api 传递 appcompat/viewpager2/recyclerview/constraintlayout/material）
+    implementation project(':banner')
+    // Glide 运行时依赖（:banner 模块中 Glide 为 compileOnly，需宿主提供）
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 }
