@@ -9,7 +9,7 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 33
-        versionName "1.0.0"
+        versionName "1.0.1"
         consumerProguardFiles 'consumer-proguard-rules.pro'
     }
 
