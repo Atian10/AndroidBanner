@@ -14,4 +14,206 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_config"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/tv_config_padding"
+        android:textColor="@color/tv_config_text"
+        android:textSize="@dimen/tv_config_text_size"
+        app:layout_constraintTop_toBottomOf="@id/banner_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/spacing_normal"
+        app:layout_constraintTop_toBottomOf="@id/tv_config"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="指示器类型"
+                android:textSize="@dimen/btn_control_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_indicator_dot"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_indicator_dot"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_indicator_number"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_indicator_number"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:text="卡片样式"
+                android:textSize="@dimen/btn_control_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_style_normal"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_style_normal"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_style_card"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_style_card"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:text="切换动画"
+                android:textSize="@dimen/btn_control_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_anim_none"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_anim_none"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_anim_scale"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_anim_scale"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_anim_flip"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_anim_flip"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_anim_fade"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_anim_fade"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_anim_depth"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_anim_depth"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:text="循环模式"
+                android:textSize="@dimen/btn_control_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_loop_on"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_loop_on"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_loop_off"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_loop_off"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_reload"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_control_height"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:text="@string/btn_reload"
+                android:textSize="@dimen/btn_control_text_size" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

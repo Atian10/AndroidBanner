@@ -23,6 +23,7 @@ import com.atian.banner.config.BannerConfig;
 import com.atian.banner.lib.R;
 import com.atian.banner.lib.databinding.BannerViewLayoutBinding;
 import com.atian.banner.enums.AnimType;
+import com.atian.banner.enums.CardStyle;
 import com.atian.banner.enums.IndicatorType;
 import com.atian.banner.interfaces.IBannerData;
 import com.atian.banner.interfaces.IImageLoader;
@@ -232,14 +233,56 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
     }
 
     /**
+     * 重启 Banner（切换配置后调用）
+     * <p>停止当前轮播，重置内部状态，重新应用配置并启动</p>
+     * <p>使用示例：
+     * <pre>
+     * bannerView.setConfig(newConfig)
+     *           .setData(newList)
+     *           .restart(this);
+     * </pre>
+     * </p>
+     *
+     * @param lifecycleOwner 宿主生命周期所有者
+     */
+    public void restart(@NonNull LifecycleOwner lifecycleOwner) {
+        // 停止自动轮播
+        stopAutoPlay();
+        // 反注册旧的页面回调
+        binding.bannerViewPager.unregisterOnPageChangeCallback(pageChangeCallback);
+        // 重置状态
+        currentPosition = 0;
+        isStarted = false;
+        // 重新启动
+        start(lifecycleOwner);
+        LogUtils.i(TAG, "restart：  Banner 已重启");
+    }
+
+    /**
      * 根据动画类型应用 PageTransformer
+     * <p>CardStyle 与 AnimType 协同规则：
+     * <ul>
+     *   <li>CardStyle.CARD：启用 ViewPager2 的 clipToPadding=false，让两侧卡片可见</li>
+     *   <li>CardStyle.CARD + AnimType.NONE：自动 fallback 到 SCALE，保证卡片视觉效果</li>
+     *   <li>CardStyle.NORMAL：正常布局，按 AnimType 应用动画</li>
+     * </ul>
+     * </p>
      */
     private void applyAnimation() {
         if (config == null) {
             return;
         }
+        // CardStyle.CARD：让 ViewPager2 不裁剪 padding 区域，两侧卡片可见
+        boolean isCardStyle = config.getCardStyle() == CardStyle.CARD;
+        binding.bannerViewPager.setClipToPadding(!isCardStyle);
+        // AnimType 决策：CARD 样式 + NONE 动画时，自动 fallback 到 SCALE
+        AnimType effectiveAnimType = config.getAnimType();
+        if (isCardStyle && effectiveAnimType == AnimType.NONE) {
+            effectiveAnimType = AnimType.SCALE;
+            LogUtils.w(TAG, "applyAnimation：  CardStyle=CARD 且 AnimType=NONE，自动切换为 SCALE");
+        }
         ViewPager2.PageTransformer transformer;
-        switch (config.getAnimType()) {
+        switch (effectiveAnimType) {
             case SCALE:
                 transformer = new ScalePageTransformer();
                 break;
