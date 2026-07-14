@@ -47,7 +47,7 @@ dependencies {
 
 // ============ Maven 发布配置（JitPack） ============
 // JitPack 会读取 gradle.properties 中的 VERSION_NAME 作为版本号
-// 依赖坐标：com.github.Atian10:android-banner:<VERSION_NAME>
+// 依赖坐标：com.github.Atian10:AndroidBanner:<VERSION_NAME>
 apply plugin: 'maven-publish'
 
 afterEvaluate {
@@ -56,14 +56,14 @@ afterEvaluate {
             // 发布 Release AAR
             release(MavenPublication) {
                 groupId = 'com.github.Atian10'
-                artifactId = 'android-banner'
+                artifactId = 'AndroidBanner'
                 version = android.defaultConfig.versionName
                 from components.release
                 // POM 元数据
                 pom {
                     name = 'Android Banner Library'
                     description = 'Android Java 轮播组件，支持无限循环、多种动画、可扩展图片加载与布局'
-                    url = 'https://github.com/Atian10/android-banner'
+                    url = 'https://github.com/Atian10/AndroidBanner'
                     licenses {
                         license {
                             name = 'Apache License 2.0'
@@ -78,9 +78,9 @@ afterEvaluate {
                         }
                     }
                     scm {
-                        connection = 'scm:git:github.com/Atian10/android-banner.git'
-                        developerConnection = 'scm:git:ssh://github.com/Atian10/android-banner.git'
-                        url = 'https://github.com/Atian10/android-banner/tree/main'
+                        connection = 'scm:git:github.com/Atian10/AndroidBanner.git'
+                        developerConnection = 'scm:git:ssh://github.com/Atian10/AndroidBanner.git'
+                        url = 'https://github.com/Atian10/AndroidBanner/tree/main'
                     }
                 }
             }
