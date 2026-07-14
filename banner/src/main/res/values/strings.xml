@@ -6,4 +6,6 @@
     <string name="banner_msg_indicator_format">%1$d/%2$d</string>
     <!-- Banner 点击提示格式：点击了第N条 -->
     <string name="banner_msg_click_format">点击了第%1$d条</string>
+    <!-- Banner 配置展示格式：当前配置概要 -->
+    <string name="banner_msg_config_format">当前配置：指示器=%1$s 样式=%2$s 动画=%3$s 循环=%4$s</string>
 </resources>

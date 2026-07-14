@@ -4,4 +4,9 @@
     <color name="bg_theme">#FFFFFF</color>
     <!-- 应用图标背景色 -->
     <color name="ic_launcher_background">#3F51B5</color>
+    <!-- Demo 控制面板按钮颜色 -->
+    <color name="btn_control_normal">#E0E0E0</color>
+    <color name="btn_control_selected">#3F51B5</color>
+    <color name="tv_control_text">#FFFFFF</color>
+    <color name="tv_config_text">#424242</color>
 </resources>

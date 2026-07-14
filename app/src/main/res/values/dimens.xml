@@ -2,4 +2,9 @@
 <resources>
     <!-- 通用间距（app 模块保留） -->
     <dimen name="spacing_normal">8dp</dimen>
+    <!-- Demo 控制面板按钮尺寸 -->
+    <dimen name="btn_control_height">36dp</dimen>
+    <dimen name="btn_control_text_size">12sp</dimen>
+    <dimen name="tv_config_text_size">13sp</dimen>
+    <dimen name="tv_config_padding">8dp</dimen>
 </resources>
