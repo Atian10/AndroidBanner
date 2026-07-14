@@ -182,12 +182,12 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    // :banner 模块已声明 VERSION_NAME=1.0.0，JitPack 会按 Tag 构建对应版本
-    implementation 'com.github.Atian10:AndroidBanner:1.0.0'
+    // :banner 模块已声明 VERSION_NAME=1.0.6，JitPack 会按 Tag 构建对应版本
+    implementation 'com.github.Atian10:AndroidBanner:1.0.6'
 }
 ```
 
-> **首次使用前**：需先在 GitHub 创建 `v1.0.0` Tag 并推送，JitPack 才会触发构建。构建状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看。
+> **首次使用前**：需先在 GitHub 创建 `v1.0.6` Tag 并推送，JitPack 才会触发构建。构建状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看。
 
 ## 使用示例
 
@@ -238,7 +238,7 @@ binding.bannerView.setConfig(newConfig)
 - **本地 AAR**：`./gradlew :banner:assembleRelease` 生成 AAR 文件
 - **JitPack 远程依赖**：已配置 `maven-publish` 插件，打 Tag 后自动发布
   - 依赖坐标：`com.github.Atian10:AndroidBanner:<tag>`
-  - 版本号由 [gradle.properties](./banner/gradle.properties) 的 `VERSION_NAME` 控制（当前 1.0.0）
+  - 版本号由 [gradle.properties](./banner/gradle.properties) 的 `VERSION_NAME` 控制（当前 1.0.6）
 
 ## 已修复缺陷
 
