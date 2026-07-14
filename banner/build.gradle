@@ -9,6 +9,7 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 33
+        versionName "1.0.0"
         consumerProguardFiles 'consumer-proguard-rules.pro'
     }
 
@@ -42,4 +43,47 @@ dependencies {
     api 'com.google.android.material:material:1.8.0'
     // Glide 改为 compileOnly，运行时由宿主项目提供
     compileOnly 'com.github.bumptech.glide:glide:4.15.1'
+}
+
+// ============ Maven 发布配置（JitPack） ============
+// JitPack 会读取 gradle.properties 中的 VERSION_NAME 作为版本号
+// 依赖坐标：com.github.Atian10:android-banner:<VERSION_NAME>
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        publications {
+            // 发布 Release AAR
+            release(MavenPublication) {
+                groupId = 'com.github.Atian10'
+                artifactId = 'android-banner'
+                version = android.defaultConfig.versionName
+                from components.release
+                // POM 元数据
+                pom {
+                    name = 'Android Banner Library'
+                    description = 'Android Java 轮播组件，支持无限循环、多种动画、可扩展图片加载与布局'
+                    url = 'https://github.com/Atian10/android-banner'
+                    licenses {
+                        license {
+                            name = 'Apache License 2.0'
+                            url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'Atian10'
+                            name = 'Atian10'
+                            url = 'https://github.com/Atian10'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:github.com/Atian10/android-banner.git'
+                        developerConnection = 'scm:git:ssh://github.com/Atian10/android-banner.git'
+                        url = 'https://github.com/Atian10/android-banner/tree/main'
+                    }
+                }
+            }
+        }
+    }
 }

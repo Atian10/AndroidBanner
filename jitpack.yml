@@ -1,0 +1,14 @@
+# JitPack 构建配置
+# 文档：https://docs.jitpack.io/android/
+
+# 指定 JDK 版本（项目使用 Java 11）
+jdk:
+  - openjdk11
+
+# 构建前安装的依赖（无额外需求）
+before_install:
+  - echo "JitPack 构建开始"
+
+# 构建命令：仅构建 :banner 模块的 Release AAR 并发布
+install:
+  - ./gradlew :banner:assembleRelease :banner:publishReleasePublicationToMavenLocal --no-daemon --no-parallel

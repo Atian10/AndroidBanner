@@ -164,13 +164,30 @@ dependencies {
 
 ### 方式三：远程依赖（JitPack）
 
-> 计划支持中，详见下方"发布能力现状"
+仓库已配置 `maven-publish`，支持 JitPack 构建。在 GitHub 打 Tag 后，JitPack 会自动构建并发布。
+
+**步骤 1**：在宿主项目根目录 `settings.gradle` 的 `repositories` 中添加 JitPack：
+
+```gradle
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }   // 新增
+    }
+}
+```
+
+**步骤 2**：在宿主 `:app` 模块 `build.gradle` 中添加依赖：
 
 ```gradle
 dependencies {
+    // :banner 模块已声明 VERSION_NAME=1.0.0，JitPack 会按 Tag 构建对应版本
     implementation 'com.github.Atian10:android-banner:1.0.0'
 }
 ```
+
+> **首次使用前**：需先在 GitHub 创建 `v1.0.0` Tag 并推送，JitPack 才会触发构建。构建状态可在 `https://jitpack.io/com/github/Atian10/android-banner` 查看。
 
 ## 使用示例
 
@@ -215,22 +232,13 @@ binding.bannerView.setConfig(newConfig)
 
 ## 发布能力现状
 
-### ✅ 已支持：源码依赖 + 本地 AAR
+### ✅ 已支持：源码依赖 + 本地 AAR + JitPack 远程依赖
 
-- 源码模块依赖：直接 `implementation project(':banner')`
-- 本地 AAR：`./gradlew :banner:assembleRelease` 生成 AAR 文件
-
-### ⚠️ 暂未支持：远程 Maven 依赖
-
-当前 `:banner` 模块的 `build.gradle` **未配置 `maven-publish` 插件**，无法通过 `./gradlew publish` 发布到 Maven 仓库。
-
-支持远程依赖需要补充：
-1. 在 `banner/build.gradle` 添加 `maven-publish` 插件
-2. 配置 `publishing` 块（groupId / artifactId / version）
-3. 选择发布渠道：
-   - **JitPack**（最简单，GitHub 仓库直接发布，适合个人/开源项目）
-   - **Maven Central**（需账号审核，适合正式开源库）
-   - **私有 Maven 仓库**（如 Nexus / Artifactory，适合企业内部）
+- **源码模块依赖**：直接 `implementation project(':banner')`
+- **本地 AAR**：`./gradlew :banner:assembleRelease` 生成 AAR 文件
+- **JitPack 远程依赖**：已配置 `maven-publish` 插件，打 Tag 后自动发布
+  - 依赖坐标：`com.github.Atian10:android-banner:<tag>`
+  - 版本号由 [gradle.properties](./banner/gradle.properties) 的 `VERSION_NAME` 控制（当前 1.0.0）
 
 ## 已修复缺陷
 
@@ -257,6 +265,11 @@ binding.bannerView.setConfig(newConfig)
 
 ## 许可证
 
-本仓库为**闭源专有资产**，All Rights Reserved。详见 [LICENSE](./LICENSE) 文件。
+本项目基于 [Apache License 2.0](./LICENSE) 开源。
 
-未经著作权人事先书面许可，任何人不得复制、修改、分发或使用本仓库的任何部分。
+- 商业使用：允许
+- 修改分发：允许（需保留版权声明）
+- 专利授权：包含
+- 责任限制：原作者不承担任何责任
+
+> 切换到 Apache 2.0 后，使用者可合法使用、修改、分发本仓库代码。如需二次封装为私有库，建议在 NOTICE 文件中注明原作者。

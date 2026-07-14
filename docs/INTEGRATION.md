@@ -89,6 +89,56 @@ dependencies {
 }
 ```
 
+### 方式三：JitPack 远程依赖（推荐，跨项目最便捷）
+
+> 仓库已配置 `maven-publish` 插件和 [jitpack.yml](../jitpack.yml)，支持 JitPack 自动构建。
+
+**步骤 1**：在宿主项目根目录 `settings.gradle` 的 `dependencyResolutionManagement.repositories` 中添加 JitPack 仓库：
+
+```gradle
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }   // 新增 JitPack
+    }
+}
+```
+
+**步骤 2**：在宿主 `:app` 模块 `build.gradle` 中添加依赖：
+
+```gradle
+dependencies {
+    implementation 'com.github.Atian10:android-banner:1.0.0'
+}
+```
+
+**步骤 3**：确认 [banner/build.gradle](../banner/build.gradle) 中的 Glide 依赖。
+
+JitPack 发布的 AAR 会携带 `api` 依赖（AndroidX 系列），但 Glide 是 `compileOnly`，宿主仍需自行引入：
+
+```gradle
+dependencies {
+    implementation 'com.github.Atian10:android-banner:1.0.0'
+    // 如使用 GlideImageLoader，需额外引入 Glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+}
+```
+
+> **版本说明**：`1.0.0` 对应 GitHub 的 `v1.0.0` Tag。发布新版本时：
+> 1. 修改 [banner/build.gradle](../banner/build.gradle) 中 `versionName "1.0.0"` 为新版本
+> 2. 提交并推送代码
+> 3. 在 GitHub 创建对应 Tag（如 `v1.1.0`）并推送
+> 4. JitPack 会自动触发构建，状态可在 `https://jitpack.io/com/github/Atian10/android-banner` 查看
+
+**JitPack 优势**：
+- 无需账号审核（Maven Central 需要）
+- 无需手动发布命令
+- 打 Tag 即发布，版本管理清晰
+- 支持分支构建（`com.github.Atian10:android-banner:main-SNAPSHOT`）
+
 ---
 
 ## 四、快速开始（5 分钟集成）
