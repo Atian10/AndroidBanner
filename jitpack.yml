@@ -1,4 +1,4 @@
-# JitPack 构建配置
+﻿# JitPack 构建配置
 # 文档：https://docs.jitpack.io/android/
 
 # 指定 JDK 版本（项目使用 Java 11）
@@ -9,7 +9,7 @@ jdk:
 before_install:
   - echo "JitPack 构建开始"
 
-# 构建命令：使用 gradle-wrapper（先生成 wrapper 再执行构建）
+# 构建命令：项目已包含 gradlew + gradle-wrapper.properties（Gradle 7.5），直接使用
 install:
-  - gradle wrapper --gradle-version 7.5
+  - chmod +x ./gradlew
   - ./gradlew :banner:assembleRelease :banner:publishReleasePublicationToMavenLocal --no-daemon --no-parallel
