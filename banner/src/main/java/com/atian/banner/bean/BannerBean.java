@@ -1,9 +1,12 @@
 package com.atian.banner.bean;
 
+import com.atian.banner.interfaces.IBannerData;
+
 /**
- * 轮播图数据模型
+ * 轮播图数据模型（实现 {@link IBannerData} 接口）
+ * <p>用户也可自定义数据模型，只需实现 {@link IBannerData} 即可</p>
  */
-public class BannerBean {
+public class BannerBean implements IBannerData {
 
     /** 图片地址（网络或本地） */
     private String imageUrl;

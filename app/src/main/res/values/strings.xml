@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AndroidBanner</string>
-    <string name="banner_image_desc">轮播图图片</string>
-    <!-- Banner 数字指示器格式：当前位/总数，如 1/4 -->
-    <string name="msg_banner_indicator_format">%1$d/%2$d</string>
-    <!-- Banner 点击提示格式：点击了第N条 -->
-    <string name="msg_banner_click_format">点击了第%1$d条</string>
 </resources>

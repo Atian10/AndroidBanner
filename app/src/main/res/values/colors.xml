@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 应用主题背景色 -->
     <color name="bg_theme">#FFFFFF</color>
-    <color name="banner_indicator_normal">#80FFFFFF</color>
-    <color name="banner_indicator_selected">#FFFFFF</color>
-    <color name="banner_indicator_text">#FFFFFF</color>
-    <color name="banner_title_bg">#80000000</color>
-    <color name="banner_title_text">#FFFFFF</color>
+    <!-- 应用图标背景色 -->
     <color name="ic_launcher_background">#3F51B5</color>
 </resources>

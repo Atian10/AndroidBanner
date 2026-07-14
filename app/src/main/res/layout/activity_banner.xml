@@ -5,24 +5,13 @@
     android:layout_height="match_parent"
     android:clipChildren="false">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_banner"
+    <com.atian.banner.view.BannerView
+        android:id="@+id/banner_view"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:clipChildren="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/ll_banner_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@id/vp_banner"
-        app:layout_constraintEnd_toEndOf="@id/vp_banner"
-        app:layout_constraintStart_toStartOf="@id/vp_banner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

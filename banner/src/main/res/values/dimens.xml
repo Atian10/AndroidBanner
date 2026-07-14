@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Banner 圆点指示器尺寸 -->
+    <dimen name="banner_indicator_size">8dp</dimen>
+    <!-- Banner 圆点指示器间距 -->
+    <dimen name="banner_indicator_margin">4dp</dimen>
+    <!-- Banner 卡片左右内边距（用于卡片缩放效果留白） -->
+    <dimen name="banner_card_padding">40dp</dimen>
+    <!-- Banner 标题内边距 -->
+    <dimen name="banner_title_padding">8dp</dimen>
+    <!-- Banner 标题文字大小 -->
+    <dimen name="banner_text_size_title">14sp</dimen>
+    <!-- Banner 数字指示器文字大小 -->
+    <dimen name="banner_text_size_indicator">12sp</dimen>
+</resources>

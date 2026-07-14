@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Banner 圆点指示器未选中颜色（半透明白） -->
+    <color name="banner_indicator_normal">#80FFFFFF</color>
+    <!-- Banner 圆点指示器选中颜色（纯白） -->
+    <color name="banner_indicator_selected">#FFFFFF</color>
+    <!-- Banner 数字指示器文字颜色（纯白） -->
+    <color name="banner_indicator_text">#FFFFFF</color>
+    <!-- Banner 标题背景颜色（半透明黑） -->
+    <color name="banner_title_bg">#80000000</color>
+    <!-- Banner 标题文字颜色（纯白） -->
+    <color name="banner_title_text">#FFFFFF</color>
+</resources>
