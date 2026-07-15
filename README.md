@@ -72,7 +72,6 @@
 ### 点击事件
 
 - `OnBannerClickListener` 回调接口（泛型）
-- 快速点击防护（500ms 间隔）
 
 ## 技术栈
 
@@ -88,7 +87,7 @@
 ## 项目结构
 
 ```
-android-banner/
+AndroidBanner/
 ├── app/                                       # Demo 应用模块
 │   └── src/main/java/com/atian/banner/
 │       ├── base/                              # 基类
