@@ -1,10 +1,8 @@
 # AndroidBanner
 
-> Android Java 轮播组件 - 已完成 Library 化改造，可作为独立 AAR 模块集成到任意 Android 项目
+> 轻量级 Android Java 轮播组件，支持无限循环、自动播放、多种动画与指示器，可通过源码/AAR/JitPack 集成
 
-## 仓库定位
-
-本仓库为 Android Java 轮播组件，已完成 **6 阶段 Library 化改造（P0-P5）**，提供独立 `:banner` Library 模块，支持通过源码依赖或 AAR 依赖集成到其他项目。
+## 简介
 
 - **Demo 应用**：`app` 模块，演示全部功能
 - **Library 模块**：`banner` 模块，对外提供轮播能力
@@ -256,29 +254,8 @@ binding.bannerView.setConfig(newConfig)
 - **本地 AAR**：`./gradlew :banner:assembleRelease` 生成 AAR 文件
 - **JitPack 远程依赖**：已配置 `maven-publish` 插件，打 Tag 后自动发布
   - 依赖坐标：`com.github.Atian10:AndroidBanner:<tag>`
-  - 版本号由 [gradle.properties](./banner/gradle.properties) 的 `VERSION_NAME` 控制（当前 1.1.0）
 
 > ⚠️ **v1.1.0 破坏性变更**：`BannerViewHolder.bind()` 方法签名新增 `BannerConfig config` 参数。自定义 ViewHolder 的用户需适配此变更，详见 [INTEGRATION.md](./docs/INTEGRATION.md)。
-
-## 已修复缺陷
-
-| 编号 | 缺陷 | 修复说明 |
-|------|------|----------|
-| P01 | bannerRunnable 边界溢出 | currentPosition 达到 MAX_VALUE-1 时重置到 middlePosition |
-| P02 | updateNumberIndicator null 检查 | 增加 adapter != null 判断 |
-| P03 | initView 调用顺序 | 先 initIndicator 再 setCurrentItem |
-| P04 | postDelayed 自调度 | 移入 isAutoPlaying 判断内，停止时不自调度 |
-| P07 | Adapter 构造 list null 兜底 | 转为 Collections.emptyList() |
-| D01 | onBannerClick 硬编码字符串 | 迁移至 strings.xml |
-| D02 | rv_item_banner.xml 命名空间位置 | 移至根元素 |
-| D03 | String.format 未传 Locale | 显式传入 Locale.US |
-| D04 | rv_item_banner.xml 硬编码颜色/尺寸 | 迁移至 colors.xml/dimens.xml |
-| L01 | namespace 冲突 | :banner namespace 改为 com.atian.banner.lib，Java 包名不变 |
-| L02 | R 类引用 | :app 通过 import com.atian.banner.lib.R 访问 banner 资源 |
-| L03 | CardStyle 配置无效 | BannerView 根据 CardStyle 启用 clipToPadding + NONE 自动 fallback SCALE |
-| P08 | 触摸滑动后自动轮播不恢复 | 新增 onPageScrollStateChanged 监听，拖拽时暂停、IDLE 时恢复（isUserDragging 标志区分） |
-| P09 | Demo 颜色按钮副作用 | 移除颜色切换按钮中多余的 currentTitleVisible=true 覆盖 |
-| D05 | banner_item.xml 标题硬编码背景色 | 移除 XML 中 android:background，改由 BannerConfig API 控制 |
 
 ## 依赖关系
 
