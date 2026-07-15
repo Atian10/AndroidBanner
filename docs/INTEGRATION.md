@@ -35,8 +35,8 @@
 - `androidx.constraintlayout:constraintlayout:2.1.4`
 - `androidx.recyclerview:recyclerview:1.3.2`
 - `androidx.viewpager2:viewpager2:1.0.0`
-- `androidx.lifecycle:lifecycle-common:2.5.1 (transitive via viewpager2)`
-- `androidx.lifecycle:lifecycle-runtime:2.5.1 (transitive via viewpager2)`
+- `androidx.lifecycle:lifecycle-common:2.5.1 (transitive via appcompat)`
+- `androidx.lifecycle:lifecycle-runtime:2.5.1 (transitive via appcompat)`
 - `com.google.android.material:material:1.9.0`
 
 > **注意**：Glide 在 `:banner` 中是 `compileOnly`，宿主项目必须自行引入 Glide 运行时依赖，详见 [第五节·使用默认图片加载器](#51-使用默认图片加载器glide)。
@@ -51,7 +51,7 @@
 
 ```gradle
 include ':app', ':banner'
-project(':banner').projectDir = new File('path/to/android-banner/banner')
+project(':banner').projectDir = new File('path/to/AndroidBanner/banner')
 ```
 
 **步骤 2**：在宿主 `:app` 模块的 `build.gradle` 中添加依赖：
@@ -64,10 +64,10 @@ dependencies {
 
 ### 方式二：AAR 依赖（适用于跨仓库发布）
 
-**步骤 1**：在 `android-banner` 仓库执行 AAR 构建：
+**步骤 1**：在 `AndroidBanner` 仓库执行 AAR 构建：
 
 ```bash
-cd path/to/android-banner
+cd path/to/AndroidBanner
 ./gradlew :banner:assembleRelease
 ```
 
@@ -214,7 +214,7 @@ binding.bannerView.setConfig(config)
 **链式调用顺序**：
 
 ```
-setConfig → setData → setImageLoader → setOnBannerClickListener → [setViewHolderFactory] → start
+setConfig → [setViewHolderFactory] → setData → setImageLoader → setOnBannerClickListener → start
 ```
 
 ### 5.2 BannerConfig 配置项
@@ -420,10 +420,10 @@ binding.bannerView.setConfig(newConfig)
 -keep class com.atian.banner.lib.databinding.** { *; }
 -keep class com.atian.banner.view.BannerView { *; }
 -keep class com.atian.banner.viewholder.** { *; }
-
-# IBannerData 实现类（宿主自定义数据模型）
--keep class * implements com.atian.banner.interfaces.IBannerData { *; }
 ```
+
+> **注意**：`consumer-proguard-rules.pro` 已包含公共 API 类的 keep 规则（config/enums/interfaces/bean/view/imageloader/viewholder），通常无需手动添加。仅当宿主自定义 `IBannerData` 实现类被混淆导致字段丢失时，才需额外添加：
+> `-keep class * implements com.atian.banner.interfaces.IBannerData { *; }`
 
 ---
 
