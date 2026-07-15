@@ -1,5 +1,6 @@
 package com.atian.banner.ui;
 
+import android.graphics.Color;
 import android.widget.Toast;
 
 import com.atian.banner.base.BaseActivity;
@@ -28,6 +29,7 @@ import java.util.Locale;
  *   <li>卡片样式：NORMAL / CARD</li>
  *   <li>切换动画：NONE / SCALE / FLIP / FADE / DEPTH</li>
  *   <li>循环模式：开 / 关</li>
+ *   <li>标题设置：显示/隐藏、背景色切换</li>
  * </ul>
  * </p>
  */
@@ -62,6 +64,12 @@ public class BannerActivity extends BaseActivity<ActivityBannerBinding> implemen
 
     /** 当前循环模式 */
     private boolean currentLoop = true;
+
+    /** 当前标题是否显示 */
+    private boolean currentTitleVisible = true;
+
+    /** 当前标题背景色 */
+    private int currentTitleBgColor = Color.parseColor("#80000000");
 
     @Override
     protected void initData() {
@@ -130,6 +138,32 @@ public class BannerActivity extends BaseActivity<ActivityBannerBinding> implemen
             updateConfigDisplay();
             reloadBanner();
         });
+        // 标题显隐切换
+        binding.btnTitleShow.setOnClickListener(v -> {
+            currentTitleVisible = true;
+            reloadBanner();
+        });
+        binding.btnTitleHide.setOnClickListener(v -> {
+            currentTitleVisible = false;
+            reloadBanner();
+        });
+        // 标题背景色切换
+        binding.btnTitleBgRed.setOnClickListener(v -> {
+            currentTitleBgColor = Color.parseColor("#80FF0000");
+            reloadBanner();
+        });
+        binding.btnTitleBgBlue.setOnClickListener(v -> {
+            currentTitleBgColor = Color.parseColor("#800000FF");
+            reloadBanner();
+        });
+        binding.btnTitleBgTransparent.setOnClickListener(v -> {
+            currentTitleBgColor = Color.TRANSPARENT;
+            reloadBanner();
+        });
+        binding.btnTitleBgDefault.setOnClickListener(v -> {
+            currentTitleBgColor = Color.parseColor("#80000000");
+            reloadBanner();
+        });
         // 重新加载
         binding.btnReload.setOnClickListener(v -> {
             updateConfigDisplay();
@@ -150,6 +184,8 @@ public class BannerActivity extends BaseActivity<ActivityBannerBinding> implemen
                 .indicatorType(currentIndicatorType)
                 .cardStyle(currentCardStyle)
                 .animType(currentAnimType)
+                .titleVisible(currentTitleVisible)
+                .titleBgColor(currentTitleBgColor)
                 .build();
         List<BannerBean> bannerList = buildBannerData();
         binding.bannerView.setConfig(config)

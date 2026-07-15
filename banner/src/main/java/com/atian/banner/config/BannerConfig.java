@@ -1,5 +1,7 @@
 package com.atian.banner.config;
 
+import android.graphics.Color;
+
 import com.atian.banner.enums.AnimType;
 import com.atian.banner.enums.CardStyle;
 import com.atian.banner.enums.IndicatorType;
@@ -25,12 +27,24 @@ public class BannerConfig {
     /** 切换动画类型 */
     private final AnimType animType;
 
+    /** 是否显示标题 */
+    private final boolean titleVisible;
+
+    /** 标题背景色 */
+    private final int titleBgColor;
+
+    /** 标题文字颜色 */
+    private final int titleTextColor;
+
     private BannerConfig(Builder builder) {
         this.interval = builder.interval;
         this.loop = builder.loop;
         this.indicatorType = builder.indicatorType;
         this.cardStyle = builder.cardStyle;
         this.animType = builder.animType;
+        this.titleVisible = builder.titleVisible;
+        this.titleBgColor = builder.titleBgColor;
+        this.titleTextColor = builder.titleTextColor;
     }
 
     public long getInterval() {
@@ -53,6 +67,18 @@ public class BannerConfig {
         return animType;
     }
 
+    public boolean isTitleVisible() {
+        return titleVisible;
+    }
+
+    public int getTitleBgColor() {
+        return titleBgColor;
+    }
+
+    public int getTitleTextColor() {
+        return titleTextColor;
+    }
+
     /**
      * BannerConfig 构造器
      */
@@ -72,6 +98,15 @@ public class BannerConfig {
 
         /** 默认缩放动画 */
         private AnimType animType = AnimType.SCALE;
+
+        /** 默认显示标题 */
+        private boolean titleVisible = true;
+
+        /** 默认标题背景色（半透明黑） */
+        private int titleBgColor = Color.parseColor("#80000000");
+
+        /** 默认标题文字颜色（纯白） */
+        private int titleTextColor = Color.WHITE;
 
         public Builder interval(long interval) {
             this.interval = interval;
@@ -95,6 +130,21 @@ public class BannerConfig {
 
         public Builder animType(AnimType animType) {
             this.animType = animType;
+            return this;
+        }
+
+        public Builder titleVisible(boolean titleVisible) {
+            this.titleVisible = titleVisible;
+            return this;
+        }
+
+        public Builder titleBgColor(int titleBgColor) {
+            this.titleBgColor = titleBgColor;
+            return this;
+        }
+
+        public Builder titleTextColor(int titleTextColor) {
+            this.titleTextColor = titleTextColor;
             return this;
         }
 

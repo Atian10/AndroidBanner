@@ -18,7 +18,6 @@
         android:id="@+id/tv_banner_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/banner_title_bg"
         android:padding="@dimen/banner_title_padding"
         android:textColor="@color/banner_title_text"
         android:textSize="@dimen/banner_text_size_title"

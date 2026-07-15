@@ -205,6 +205,83 @@
                     android:textSize="@dimen/btn_control_text_size" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:text="标题设置"
+                android:textSize="@dimen/btn_control_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_title_show"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_title_show"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_title_hide"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_title_hide"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_title_bg_red"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_title_bg_red"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_title_bg_blue"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_title_bg_blue"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_title_bg_transparent"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_title_bg_transparent"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_title_bg_default"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_title_bg_default"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_reload"
                 android:layout_width="match_parent"

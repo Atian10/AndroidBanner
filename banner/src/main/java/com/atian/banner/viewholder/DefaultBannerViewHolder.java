@@ -3,6 +3,7 @@ package com.atian.banner.viewholder;
 import android.view.View;
 
 import com.atian.banner.lib.databinding.BannerItemBinding;
+import com.atian.banner.config.BannerConfig;
 import com.atian.banner.interfaces.IBannerData;
 import com.atian.banner.interfaces.IImageLoader;
 
@@ -10,6 +11,7 @@ import com.atian.banner.interfaces.IImageLoader;
  * 默认 Banner ViewHolder 实现
  * <p>使用 {@link BannerItemBinding}（banner_item.xml）布局，
  * 展示图片和标题</p>
+ * <p>支持通过 {@link BannerConfig} 控制标题显隐、背景色、文字颜色</p>
  */
 public class DefaultBannerViewHolder extends BannerViewHolder<IBannerData> {
 
@@ -21,10 +23,17 @@ public class DefaultBannerViewHolder extends BannerViewHolder<IBannerData> {
     }
 
     @Override
-    public void bind(IBannerData data, int position, IImageLoader imageLoader) {
-        // 设置标题
-        binding.tvBannerTitle.setText(data.getTitle());
-        // 加载图片
+    public void bind(IBannerData data, int position, IImageLoader imageLoader, BannerConfig config) {
+        if (config != null && !config.isTitleVisible()) {
+            binding.tvBannerTitle.setVisibility(View.GONE);
+        } else {
+            binding.tvBannerTitle.setVisibility(View.VISIBLE);
+            binding.tvBannerTitle.setText(data.getTitle());
+            if (config != null) {
+                binding.tvBannerTitle.setBackgroundColor(config.getTitleBgColor());
+                binding.tvBannerTitle.setTextColor(config.getTitleTextColor());
+            }
+        }
         if (imageLoader != null) {
             imageLoader.loadImage(itemView.getContext(), data.getImageUrl(), binding.ivBannerImage);
         }

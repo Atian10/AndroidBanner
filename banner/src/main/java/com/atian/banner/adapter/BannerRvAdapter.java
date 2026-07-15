@@ -3,8 +3,10 @@ package com.atian.banner.adapter;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.atian.banner.config.BannerConfig;
 import com.atian.banner.interfaces.IBannerData;
 import com.atian.banner.interfaces.IImageLoader;
 import com.atian.banner.interfaces.OnBannerClickListener;
@@ -33,6 +35,9 @@ public class BannerRvAdapter<T extends IBannerData> extends RecyclerView.Adapter
 
     /** ViewHolder 工厂 */
     private final BannerViewHolderFactory<T> factory;
+
+    /** Banner 配置（传递给 ViewHolder 用于控制标题等样式） */
+    private BannerConfig config;
 
     /** 图片加载器 */
     private IImageLoader imageLoader;
@@ -64,6 +69,15 @@ public class BannerRvAdapter<T extends IBannerData> extends RecyclerView.Adapter
         this.loop = loop;
         // factory 为 null 时使用默认工厂（类型安全：DefaultBannerViewHolderFactory 实现 BannerViewHolderFactory<IBannerData>）
         this.factory = factory != null ? factory : (BannerViewHolderFactory<T>) new DefaultBannerViewHolderFactory();
+    }
+
+    /**
+     * 设置 Banner 配置
+     *
+     * @param config Banner 配置，传递给 ViewHolder 用于控制标题等样式
+     */
+    public void setConfig(@Nullable BannerConfig config) {
+        this.config = config;
     }
 
     /**
@@ -138,8 +152,8 @@ public class BannerRvAdapter<T extends IBannerData> extends RecyclerView.Adapter
     public void onBindViewHolder(@NonNull BannerViewHolder<T> holder, int position) {
         int realPosition = getRealPosition(position);
         T data = list.get(realPosition);
-        // 委托给 ViewHolder 进行数据绑定
-        holder.bind(data, realPosition, imageLoader);
+        // 委托给 ViewHolder 进行数据绑定，传入 config 控制标题样式
+        holder.bind(data, realPosition, imageLoader, config);
         // 点击事件由 Adapter 统一处理
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
