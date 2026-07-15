@@ -34,7 +34,7 @@
 - `androidx.appcompat:appcompat:1.6.1`
 - `androidx.constraintlayout:constraintlayout:2.1.4`
 - `androidx.recyclerview:recyclerview:1.3.2`
-- `androidx.viewpager2:viewpager2:1.0.6`
+- `androidx.viewpager2:viewpager2:1.0.0`
 - `androidx.lifecycle:lifecycle-common:2.5.1 (transitive via viewpager2)`
 - `androidx.lifecycle:lifecycle-runtime:2.5.1 (transitive via viewpager2)`
 - `com.google.android.material:material:1.9.0`
@@ -82,7 +82,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
-    implementation 'androidx.viewpager2:viewpager2:1.0.6'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-runtime:2.5.1'
     implementation 'com.google.android.material:material:1.9.0'
@@ -110,7 +110,7 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    implementation 'com.github.Atian10:AndroidBanner:1.0.6'
+    implementation 'com.github.Atian10:AndroidBanner:1.0.7'
 }
 ```
 
@@ -120,15 +120,15 @@ JitPack 发布的 AAR 会携带 `api` 依赖（AndroidX 系列），但 Glide �
 
 ```gradle
 dependencies {
-    implementation 'com.github.Atian10:AndroidBanner:1.0.6'
+    implementation 'com.github.Atian10:AndroidBanner:1.0.7'
     // 如使用 GlideImageLoader，需额外引入 Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 }
 ```
 
-> **版本说明**：`1.0.6` 对应 GitHub 的 `v1.0.6` Tag。发布新版本时：
-> 1. 修改 [banner/build.gradle](../banner/build.gradle) 中 `versionName "1.0.6"` 为新版本
+> **版本说明**：`1.0.7` 对应 GitHub 的 `v1.0.7` Tag（已发布）。发布新版本时：
+> 1. 修改 [banner/gradle.properties](../banner/gradle.properties) 中 `VERSION_NAME` 为新版本
 > 2. 提交并推送代码
 > 3. 在 GitHub 创建对应 Tag（如 `v1.1.0`）并推送
 > 4. JitPack 会自动触发构建，状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看
