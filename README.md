@@ -29,6 +29,9 @@
 | `indicatorType` | IndicatorType | DOT | 指示器类型（DOT/NUMBER） |
 | `cardStyle` | CardStyle | NORMAL | 卡片样式（NORMAL/CARD） |
 | `animType` | AnimType | SCALE | 切换动画类型（NONE/SCALE/FLIP/FADE/DEPTH） |
+| `titleVisible` | boolean | true | 是否显示标题（v1.1.0 新增） |
+| `titleBgColor` | int | #80000000 | 标题背景色（v1.1.0 新增） |
+| `titleTextColor` | int | #FFFFFF | 标题文字颜色（v1.1.0 新增） |
 
 ### 指示器系统
 
@@ -181,12 +184,12 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    // :banner 模块已声明 VERSION_NAME=1.0.7，JitPack 会按 Tag 构建对应版本
-    implementation 'com.github.Atian10:AndroidBanner:1.0.7'
+    // :banner 模块已声明 VERSION_NAME=1.1.0，JitPack 会按 Tag 构建对应版本
+    implementation 'com.github.Atian10:AndroidBanner:1.1.0'
 }
 ```
 
-> **已发布**：`v1.0.7` Tag 已推送，JitPack 构建已通过。构建状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看。
+> **已发布**：`v1.0.7` Tag 已推送，JitPack 构建已通过。`v1.1.0` 待发布（含标题样式控制 API + 触摸恢复修复）。构建状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看。
 
 ## 使用示例
 
@@ -217,6 +220,22 @@ BannerConfig config = new BannerConfig.Builder()
         .build();
 ```
 
+### 标题样式控制（v1.1.0 新增）
+
+```java
+// 隐藏标题
+BannerConfig config = new BannerConfig.Builder()
+        .titleVisible(false)
+        .build();
+
+// 自定义标题颜色
+BannerConfig config = new BannerConfig.Builder()
+        .titleVisible(true)
+        .titleBgColor(Color.parseColor("#80FF0000"))  // 半透明红底
+        .titleTextColor(Color.YELLOW)                    // 黄色文字
+        .build();
+```
+
 ### 运行时切换配置
 
 ```java
@@ -237,7 +256,9 @@ binding.bannerView.setConfig(newConfig)
 - **本地 AAR**：`./gradlew :banner:assembleRelease` 生成 AAR 文件
 - **JitPack 远程依赖**：已配置 `maven-publish` 插件，打 Tag 后自动发布
   - 依赖坐标：`com.github.Atian10:AndroidBanner:<tag>`
-  - 版本号由 [gradle.properties](./banner/gradle.properties) 的 `VERSION_NAME` 控制（当前 1.0.7）
+  - 版本号由 [gradle.properties](./banner/gradle.properties) 的 `VERSION_NAME` 控制（当前 1.1.0）
+
+> ⚠️ **v1.1.0 破坏性变更**：`BannerViewHolder.bind()` 方法签名新增 `BannerConfig config` 参数。自定义 ViewHolder 的用户需适配此变更，详见 [INTEGRATION.md](./docs/INTEGRATION.md)。
 
 ## 已修复缺陷
 
@@ -255,6 +276,9 @@ binding.bannerView.setConfig(newConfig)
 | L01 | namespace 冲突 | :banner namespace 改为 com.atian.banner.lib，Java 包名不变 |
 | L02 | R 类引用 | :app 通过 import com.atian.banner.lib.R 访问 banner 资源 |
 | L03 | CardStyle 配置无效 | BannerView 根据 CardStyle 启用 clipToPadding + NONE 自动 fallback SCALE |
+| P08 | 触摸滑动后自动轮播不恢复 | 新增 onPageScrollStateChanged 监听，拖拽时暂停、IDLE 时恢复（isUserDragging 标志区分） |
+| P09 | Demo 颜色按钮副作用 | 移除颜色切换按钮中多余的 currentTitleVisible=true 覆盖 |
+| D05 | banner_item.xml 标题硬编码背景色 | 移除 XML 中 android:background，改由 BannerConfig API 控制 |
 
 ## 依赖关系
 

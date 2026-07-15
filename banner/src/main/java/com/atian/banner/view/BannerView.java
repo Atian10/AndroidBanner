@@ -194,6 +194,7 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
         // 拷贝为 List<IBannerData>，避免泛型协变问题
         List<IBannerData> dataList = list == null ? null : new ArrayList<>(list);
         adapter = new BannerRvAdapter<>(dataList, config.isLoop(), viewHolderFactory);
+        adapter.setConfig(config);
         return this;
     }
 

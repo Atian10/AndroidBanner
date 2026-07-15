@@ -14,6 +14,13 @@
     <string name="btn_loop_on">循环：开</string>
     <string name="btn_loop_off">循环：关</string>
     <string name="btn_reload">重新加载</string>
+    <!-- 标题控制 -->
+    <string name="btn_title_show">标题：显示</string>
+    <string name="btn_title_hide">标题：隐藏</string>
+    <string name="btn_title_bg_red">红底</string>
+    <string name="btn_title_bg_blue">蓝底</string>
+    <string name="btn_title_bg_transparent">透明底</string>
+    <string name="btn_title_bg_default">默认底</string>
     <!-- 当前配置显示 -->
     <string name="tv_config_format">当前配置：指示器=%1$s 样式=%2$s 动画=%3$s 循环=%4$s</string>
 </resources>
