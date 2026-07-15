@@ -78,12 +78,35 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
     /** 是否已执行过 start（避免重复注册生命周期） */
     private boolean isStarted = false;
 
+    /** 用户是否正在拖拽（区分用户拖拽与自动翻页的 IDLE 回调） */
+    private boolean isUserDragging = false;
+
     private final ViewPager2.OnPageChangeCallback pageChangeCallback = new ViewPager2.OnPageChangeCallback() {
         @Override
         public void onPageSelected(int position) {
             currentPosition = position;
             updateIndicator(position);
             LogUtils.d(TAG, "onPageSelected：  position=" + position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
+                // 用户开始拖拽，移除待执行的轮播回调，避免与手势冲突
+                isUserDragging = true;
+                bannerHandler.removeCallbacks(bannerRunnable);
+                LogUtils.d(TAG, "onPageScrollStateChanged：  用户拖拽中，暂停自动轮播");
+            } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                // 仅当用户拖拽导致的 IDLE 才恢复轮播，自动翻页的 IDLE 跳过（避免时间漂移）
+                boolean wasDragging = isUserDragging;
+                isUserDragging = false;
+                if (wasDragging && isAutoPlaying && config != null
+                        && adapter != null && adapter.getRealCount() > 0) {
+                    bannerHandler.removeCallbacks(bannerRunnable);
+                    bannerHandler.postDelayed(bannerRunnable, config.getInterval());
+                    LogUtils.d(TAG, "onPageScrollStateChanged：  用户拖拽结束，恢复自动轮播");
+                }
+            }
         }
     };
 
