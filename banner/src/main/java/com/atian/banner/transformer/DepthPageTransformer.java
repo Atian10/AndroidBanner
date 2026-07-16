@@ -13,7 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 public class DepthPageTransformer implements ViewPager2.PageTransformer {
 
     /** 非当前页最小缩放比例 */
-    private static final float MIN_SCALE = 0.75f;
+    private static final float MIN_SCALE = 0.5f;
 
     @Override
     public void transformPage(@NonNull View page, float position) {
@@ -27,7 +27,7 @@ public class DepthPageTransformer implements ViewPager2.PageTransformer {
             // [-1, 0]：左侧页（已离开或即将进入）
             // 透明度从 0 渐变到 1
             page.setAlpha(1f + position);
-            // 缩放从 0.75 渐变到 1.0
+            // 缩放从 0.5 渐变到 1.0
             float scale = MIN_SCALE + (1 - MIN_SCALE) * (1 + position);
             page.setScaleX(scale);
             page.setScaleY(scale);

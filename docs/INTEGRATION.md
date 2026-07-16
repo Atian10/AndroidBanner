@@ -228,6 +228,7 @@ setConfig → [setViewHolderFactory] → setData → setImageLoader → setOnBan
 | `interval(long)` | long | `3000L` | 轮播间隔（毫秒） |
 | `loop(boolean)` | boolean | `true` | 是否无限循环 |
 | `indicatorType(IndicatorType)` | IndicatorType | `DOT` | 指示器类型 |
+| `indicatorVisible(boolean)` | boolean | `true` | 是否显示指示器 |
 | `cardStyle(CardStyle)` | CardStyle | `NORMAL` | 卡片样式 |
 | `animType(AnimType)` | AnimType | `SCALE` | 切换动画类型 |
 | `titleVisible(boolean)` | boolean | `true` | 是否显示标题（v1.1.0 新增） |
@@ -257,10 +258,10 @@ setConfig → [setViewHolderFactory] → setData → setImageLoader → setOnBan
 | 取值 | 效果 |
 |------|------|
 | `NONE` | 无动画 |
-| `SCALE` | 缩放 + 透明度（两侧页缩小 0.85，透明度 0.5） |
-| `FLIP` | 3D 翻转（沿 Y 轴旋转） |
-| `FADE` | 淡入淡出（仅透明度变化） |
-| `DEPTH` | 深度（左侧页缩小，右侧页从右侧平移进入） |
+| `SCALE` | 缩放 + 透明度（两侧页缩小 0.7，透明度 0.3） |
+| `FLIP` | 3D 翻转（沿 Y 轴旋转 135°） |
+| `FADE` | 淡入淡出（透明度 + 轻微缩放 0.85） |
+| `DEPTH` | 深度（左侧页缩小 0.5，右侧页从右侧平移进入） |
 
 ---
 

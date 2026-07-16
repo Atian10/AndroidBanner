@@ -12,7 +12,7 @@ import androidx.viewpager2.widget.ViewPager2;
 public class FlipPageTransformer implements ViewPager2.PageTransformer {
 
     /** 最大旋转角度（度） */
-    private static final float MAX_ROTATION = 90f;
+    private static final float MAX_ROTATION = 135f;
 
     /** Camera 距离系数（越大透视越弱） */
     private static final float CAMERA_DISTANCE_FACTOR = 20f;
