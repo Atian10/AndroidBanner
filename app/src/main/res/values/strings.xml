@@ -4,6 +4,8 @@
     <!-- Banner 演示页：控制面板按钮 -->
     <string name="btn_indicator_dot">圆点指示器</string>
     <string name="btn_indicator_number">数字指示器</string>
+    <string name="btn_indicator_show">指示器：开</string>
+    <string name="btn_indicator_hide">指示器：关</string>
     <string name="btn_style_normal">普通样式</string>
     <string name="btn_style_card">卡片样式</string>
     <string name="btn_anim_none">无动画</string>

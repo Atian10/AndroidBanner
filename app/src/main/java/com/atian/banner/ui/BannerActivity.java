@@ -56,6 +56,9 @@ public class BannerActivity extends BaseActivity<ActivityBannerBinding> implemen
     /** 当前指示器类型 */
     private IndicatorType currentIndicatorType = IndicatorType.DOT;
 
+    /** 当前指示器是否显示 */
+    private boolean currentIndicatorVisible = true;
+
     /** 当前卡片样式 */
     private CardStyle currentCardStyle = CardStyle.NORMAL;
 
@@ -83,86 +86,95 @@ public class BannerActivity extends BaseActivity<ActivityBannerBinding> implemen
         binding.btnIndicatorDot.setOnClickListener(v -> {
             currentIndicatorType = IndicatorType.DOT;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnIndicatorNumber.setOnClickListener(v -> {
             currentIndicatorType = IndicatorType.NUMBER;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
+        });
+        // 指示器开关切换
+        binding.btnIndicatorShow.setOnClickListener(v -> {
+            currentIndicatorVisible = true;
+            switchBannerConfig();
+        });
+        binding.btnIndicatorHide.setOnClickListener(v -> {
+            currentIndicatorVisible = false;
+            switchBannerConfig();
         });
         // 卡片样式切换
         binding.btnStyleNormal.setOnClickListener(v -> {
             currentCardStyle = CardStyle.NORMAL;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnStyleCard.setOnClickListener(v -> {
             currentCardStyle = CardStyle.CARD;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         // 动画类型切换
         binding.btnAnimNone.setOnClickListener(v -> {
             currentAnimType = AnimType.NONE;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnAnimScale.setOnClickListener(v -> {
             currentAnimType = AnimType.SCALE;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnAnimFlip.setOnClickListener(v -> {
             currentAnimType = AnimType.FLIP;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnAnimFade.setOnClickListener(v -> {
             currentAnimType = AnimType.FADE;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnAnimDepth.setOnClickListener(v -> {
             currentAnimType = AnimType.DEPTH;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         // 循环模式切换
         binding.btnLoopOn.setOnClickListener(v -> {
             currentLoop = true;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnLoopOff.setOnClickListener(v -> {
             currentLoop = false;
             updateConfigDisplay();
-            reloadBanner();
+            switchBannerConfig();
         });
         // 标题显隐切换
         binding.btnTitleShow.setOnClickListener(v -> {
             currentTitleVisible = true;
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnTitleHide.setOnClickListener(v -> {
             currentTitleVisible = false;
-            reloadBanner();
+            switchBannerConfig();
         });
         // 标题背景色切换
         binding.btnTitleBgRed.setOnClickListener(v -> {
             currentTitleBgColor = Color.parseColor("#80FF0000");
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnTitleBgBlue.setOnClickListener(v -> {
             currentTitleBgColor = Color.parseColor("#800000FF");
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnTitleBgTransparent.setOnClickListener(v -> {
             currentTitleBgColor = Color.TRANSPARENT;
-            reloadBanner();
+            switchBannerConfig();
         });
         binding.btnTitleBgDefault.setOnClickListener(v -> {
             currentTitleBgColor = Color.parseColor("#80000000");
-            reloadBanner();
+            switchBannerConfig();
         });
         // 重新加载
         binding.btnReload.setOnClickListener(v -> {
@@ -175,13 +187,14 @@ public class BannerActivity extends BaseActivity<ActivityBannerBinding> implemen
     }
 
     /**
-     * 根据当前配置重新加载 Banner
+     * 根据当前配置重新加载 Banner（从第一张重新开始）
      */
     private void reloadBanner() {
         BannerConfig config = new BannerConfig.Builder()
                 .interval(3000L)
                 .loop(currentLoop)
                 .indicatorType(currentIndicatorType)
+                .indicatorVisible(currentIndicatorVisible)
                 .cardStyle(currentCardStyle)
                 .animType(currentAnimType)
                 .titleVisible(currentTitleVisible)
@@ -193,6 +206,30 @@ public class BannerActivity extends BaseActivity<ActivityBannerBinding> implemen
                 .setImageLoader(new GlideImageLoader())
                 .setOnBannerClickListener(this)
                 .restart(this);
+    }
+
+    /**
+     * 根据当前配置切换 Banner（保持当前图片位置）
+     * <p>用于动画/指示器/卡片样式/循环模式/标题样式等配置切换，
+     * 避免切换后重置到第一张。</p>
+     */
+    private void switchBannerConfig() {
+        BannerConfig config = new BannerConfig.Builder()
+                .interval(3000L)
+                .loop(currentLoop)
+                .indicatorType(currentIndicatorType)
+                .indicatorVisible(currentIndicatorVisible)
+                .cardStyle(currentCardStyle)
+                .animType(currentAnimType)
+                .titleVisible(currentTitleVisible)
+                .titleBgColor(currentTitleBgColor)
+                .build();
+        List<BannerBean> bannerList = buildBannerData();
+        binding.bannerView.setConfig(config)
+                .setData(bannerList)
+                .setImageLoader(new GlideImageLoader())
+                .setOnBannerClickListener(this)
+                .restartKeepPosition(this);
     }
 
     /**

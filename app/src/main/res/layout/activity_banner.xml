@@ -69,6 +69,29 @@
                     android:textSize="@dimen/btn_control_text_size" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_indicator_show"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_indicator_show"
+                    android:textSize="@dimen/btn_control_text_size" />
+
+                <Button
+                    android:id="@+id/btn_indicator_hide"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/btn_control_height"
+                    android:layout_weight="1"
+                    android:text="@string/btn_indicator_hide"
+                    android:textSize="@dimen/btn_control_text_size" />
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
