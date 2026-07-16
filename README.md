@@ -25,6 +25,7 @@
 | `interval` | long | 3000L | 轮播间隔（毫秒） |
 | `loop` | boolean | true | 是否无限循环 |
 | `indicatorType` | IndicatorType | DOT | 指示器类型（DOT/NUMBER） |
+| `indicatorVisible` | boolean | true | 是否显示指示器 |
 | `cardStyle` | CardStyle | NORMAL | 卡片样式（NORMAL/CARD） |
 | `animType` | AnimType | SCALE | 切换动画类型（NONE/SCALE/FLIP/FADE/DEPTH） |
 | `titleVisible` | boolean | true | 是否显示标题（v1.1.0 新增） |
@@ -44,9 +45,9 @@
 | 动画类型 | 类名 | 效果 |
 |----------|------|------|
 | `NONE` | - | 无动画 |
-| `SCALE` | ScalePageTransformer | 非选中页缩放 0.85 + 透明度 0.5 |
+| `SCALE` | ScalePageTransformer | 非选中页缩放 0.7 + 透明度 0.3 |
 | `FLIP` | FlipPageTransformer | 沿 Y 轴 3D 翻转 |
-| `FADE` | FadePageTransformer | 透明度淡入淡出 |
+| `FADE` | FadePageTransformer | 透明度淡入淡出 + 轻微缩放 |
 | `DEPTH` | DepthPageTransformer | 左侧页缩小，右侧页从右侧平移进入 |
 
 **CardStyle 与 AnimType 协同规则**：
@@ -187,7 +188,7 @@ dependencies {
 }
 ```
 
-> **已发布**：`v1.0.7` Tag 已推送，JitPack 构建已通过。`v1.1.0` 待发布（含标题样式控制 API + 触摸恢复修复）。构建状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看。
+> **已发布**：`v1.0.7` Tag 已推送，JitPack 构建已通过。`v1.1.0` 待发布（含标题样式控制 API + 触摸恢复修复 + restart 后轮播恢复修复）。构建状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看。
 
 ## 使用示例
 

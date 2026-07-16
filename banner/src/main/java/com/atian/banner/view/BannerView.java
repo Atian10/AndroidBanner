@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -234,6 +235,16 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
      * @param lifecycleOwner 宿主生命周期所有者
      */
     public void start(@NonNull LifecycleOwner lifecycleOwner) {
+        startInternal(lifecycleOwner, false);
+    }
+
+    /**
+     * 启动 Banner 内部实现
+     *
+     * @param lifecycleOwner 宿主生命周期所有者
+     * @param keepPosition   true 保持当前真实图片位置；false 定位到 middlePosition（loop）或 0（非 loop）
+     */
+    private void startInternal(@NonNull LifecycleOwner lifecycleOwner, boolean keepPosition) {
         if (isStarted) {
             LogUtils.w(TAG, "start：  BannerView 已启动，请勿重复调用");
             return;
@@ -248,16 +259,55 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
         applyAnimation();
         // 先初始化指示器（基于真实条数，避免 loop=true 时创建 10 亿圆点）
         initIndicator(adapter == null ? 0 : adapter.getRealCount());
-        // 后定位到 middlePosition，实现真无限循环（P03 调用顺序）
-        if (config != null && config.isLoop() && adapter != null && adapter.getRealCount() > 0) {
-            currentPosition = adapter.getMiddlePosition();
+        // 定位到目标位置
+        if (adapter != null && adapter.getRealCount() > 0 && config != null) {
+            if (keepPosition) {
+                // 保持当前真实图片位置：loop 模式下重新计算 middlePosition 区间内的等价位置
+                currentPosition = computeKeepPosition(currentPosition);
+            } else if (config.isLoop()) {
+                // 首次启动或重新加载：定位到 middlePosition，实现真无限循环（P03 调用顺序）
+                currentPosition = adapter.getMiddlePosition();
+            } else {
+                currentPosition = 0;
+            }
             binding.bannerViewPager.setCurrentItem(currentPosition, false);
+            // 更新指示器到当前位置
+            updateIndicator(currentPosition);
         }
         LogUtils.i(TAG, "start：  Banner 启动完成");
     }
 
     /**
-     * 重启 Banner（切换配置后调用）
+     * 计算保持位置模式下的 ViewPager2 目标位置
+     * <p>切换循环模式时，真实图片需保持不变，但 ViewPager2 位置需根据新 loop 配置调整：
+     * <ul>
+     *   <li>新 loop=true：定位到 middlePosition 区间内、对应当前真实图片的位置，保证双向滑动空间</li>
+     *   <li>新 loop=false：转换为真实位置（0 ~ realCount-1）</li>
+     * </ul>
+     * </p>
+     *
+     * @param currentPosition 当前 ViewPager2 位置（可能是 Integer.MAX_VALUE 区间内的大数）
+     * @return 新配置下的目标 ViewPager2 位置
+     */
+    private int computeKeepPosition(int currentPosition) {
+        if (adapter == null || adapter.getRealCount() == 0 || config == null) {
+            return 0;
+        }
+        int realCount = adapter.getRealCount();
+        int realPosition = currentPosition % realCount;
+        if (config.isLoop()) {
+            // loop=true：定位到 middlePosition 附近的等价位置
+            int middle = adapter.getMiddlePosition();
+            // middle 已对齐到 realCount 的整数倍（展示第 0 项），加上 realPosition 得到对应当前图片的位置
+            return middle + realPosition;
+        } else {
+            // loop=false：直接使用真实位置
+            return realPosition;
+        }
+    }
+
+    /**
+     * 重启 Banner（从第一张重新开始）
      * <p>停止当前轮播，重置内部状态，重新应用配置并启动</p>
      * <p>使用示例：
      * <pre>
@@ -274,12 +324,51 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
         stopAutoPlay();
         // 反注册旧的页面回调
         binding.bannerViewPager.unregisterOnPageChangeCallback(pageChangeCallback);
-        // 重置状态
+        // 重置状态：从第一张重新开始
         currentPosition = 0;
         isStarted = false;
         // 重新启动
-        start(lifecycleOwner);
+        startInternal(lifecycleOwner, false);
+        // P08 修复：restart 场景下 addObserver 重复注册不会再次触发 onResume，
+        // 导致 stopAutoPlay 后 startAutoPlay 无调用路径，轮播停止。
+        // 此处显式判断：若宿主已处于 RESUMED 状态，直接恢复自动轮播。
+        // 首次启动（onCreate 中）状态为 CREATED，不会进入此分支，仍由 onResume 正常触发。
+        if (lifecycleOwner.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+            startAutoPlay();
+        }
         LogUtils.i(TAG, "restart：  Banner 已重启");
+    }
+
+    /**
+     * 重启 Banner（保持当前图片位置）
+     * <p>切换配置（动画/指示器/卡片样式/循环模式等）时调用，
+     * 保留当前正在显示的图片，仅应用新配置。</p>
+     * <p>使用示例：
+     * <pre>
+     * bannerView.setConfig(newConfig)
+     *           .restartKeepPosition(this);
+     * </pre>
+     * </p>
+     *
+     * @param lifecycleOwner 宿主生命周期所有者
+     */
+    public void restartKeepPosition(@NonNull LifecycleOwner lifecycleOwner) {
+        // 停止自动轮播
+        stopAutoPlay();
+        // 反注册旧的页面回调
+        binding.bannerViewPager.unregisterOnPageChangeCallback(pageChangeCallback);
+        // 保持当前 currentPosition 不变（不重置为 0），
+        // loop 模式下 currentPosition 可能是 Integer.MAX_VALUE 区间内的大数，
+        // 由 startInternal 中 computeKeepPosition 重新计算到新配置的目标位置
+        // isStarted 置 false 允许重新启动
+        isStarted = false;
+        // 重新启动（保持位置）
+        startInternal(lifecycleOwner, true);
+        // 恢复自动轮播（同 restart）
+        if (lifecycleOwner.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+            startAutoPlay();
+        }
+        LogUtils.i(TAG, "restartKeepPosition：  Banner 已重启（保持当前位置）");
     }
 
     /**
@@ -296,9 +385,16 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
         if (config == null) {
             return;
         }
-        // CardStyle.CARD：让 ViewPager2 不裁剪 padding 区域，两侧卡片可见
+        // CardStyle.CARD：设置 padding 让两侧卡片可见 + 不裁剪 padding 区域
+        // CardStyle.NORMAL：清除 padding + 裁剪 padding 区域（避免切换后残留留白）
         boolean isCardStyle = config.getCardStyle() == CardStyle.CARD;
+        int padding = isCardStyle
+                ? (int) getResources().getDimension(R.dimen.banner_card_padding) : 0;
+        binding.bannerViewPager.setPadding(padding, 0, padding, 0);
         binding.bannerViewPager.setClipToPadding(!isCardStyle);
+        // 预创建相邻页：CARD 样式必须（padding 区域需显示相邻页），
+        // NORMAL 样式建议（确保滚动时动画流畅）
+        binding.bannerViewPager.setOffscreenPageLimit(1);
         // AnimType 决策：CARD 样式 + NONE 动画时，自动 fallback 到 SCALE
         AnimType effectiveAnimType = config.getAnimType();
         if (isCardStyle && effectiveAnimType == AnimType.NONE) {
@@ -336,6 +432,13 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
         if (config == null) {
             return;
         }
+        // 指示器开关：关闭时隐藏容器并清除残留 View
+        if (!config.isIndicatorVisible()) {
+            binding.bannerIndicatorContainer.setVisibility(GONE);
+            binding.bannerIndicatorContainer.removeAllViews();
+            return;
+        }
+        binding.bannerIndicatorContainer.setVisibility(VISIBLE);
         switch (config.getIndicatorType()) {
             case NUMBER:
                 initNumberIndicator(count);

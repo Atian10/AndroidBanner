@@ -36,6 +36,9 @@ public class BannerConfig {
     /** 标题文字颜色 */
     private final int titleTextColor;
 
+    /** 是否显示指示器 */
+    private final boolean indicatorVisible;
+
     private BannerConfig(Builder builder) {
         this.interval = builder.interval;
         this.loop = builder.loop;
@@ -45,6 +48,7 @@ public class BannerConfig {
         this.titleVisible = builder.titleVisible;
         this.titleBgColor = builder.titleBgColor;
         this.titleTextColor = builder.titleTextColor;
+        this.indicatorVisible = builder.indicatorVisible;
     }
 
     public long getInterval() {
@@ -79,6 +83,10 @@ public class BannerConfig {
         return titleTextColor;
     }
 
+    public boolean isIndicatorVisible() {
+        return indicatorVisible;
+    }
+
     /**
      * BannerConfig 构造器
      */
@@ -107,6 +115,9 @@ public class BannerConfig {
 
         /** 默认标题文字颜色（纯白） */
         private int titleTextColor = Color.WHITE;
+
+        /** 默认显示指示器 */
+        private boolean indicatorVisible = true;
 
         public Builder interval(long interval) {
             this.interval = interval;
@@ -145,6 +156,11 @@ public class BannerConfig {
 
         public Builder titleTextColor(int titleTextColor) {
             this.titleTextColor = titleTextColor;
+            return this;
+        }
+
+        public Builder indicatorVisible(boolean indicatorVisible) {
+            this.indicatorVisible = indicatorVisible;
             return this;
         }
 
