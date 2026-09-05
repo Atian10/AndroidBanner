@@ -24,6 +24,8 @@ public class DefaultBannerViewHolder extends BannerViewHolder<IBannerData> {
 
     @Override
     public void bind(IBannerData data, int position, IImageLoader imageLoader, BannerConfig config) {
+        // ViewHolder 会被 RecyclerView 复用，绑定新数据前先清除上一条图片。
+        binding.ivBannerImage.setImageDrawable(null);
         if (config != null && !config.isTitleVisible()) {
             binding.tvBannerTitle.setVisibility(View.GONE);
         } else {

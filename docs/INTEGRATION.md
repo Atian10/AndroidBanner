@@ -1,6 +1,6 @@
 # Banner 轮播组件对接指南
 
-> 本文档面向需要在本项目中集成轮播功能的开发者，介绍如何依赖 `:banner` 模块并完成全部功能对接。
+> 本文档面向需要在本项目中集成轮播功能的开发者，介绍如何依赖 `:banner` 模块并完成主要功能对接。
 
 ---
 
@@ -8,7 +8,7 @@
 
 `:banner` 是一个独立的 Android Library 模块，封装了 ViewPager2 + 指示器 + 自动轮播 + 动画系统，支持：
 
-- 真无限循环（双向滑动约 10 亿次）
+- 近似无限循环（`loop=true` 时使用 `Integer.MAX_VALUE` 的超大区间）
 - 生命周期自动感知（onResume 轮播 / onPause 暂停 / onDestroy 释放）
 - 5 种切换动画（NONE / SCALE / FLIP / FADE / DEPTH）
 - 2 种指示器（圆点 / 数字）
@@ -39,7 +39,7 @@
 - `androidx.lifecycle:lifecycle-runtime:2.5.1 (transitive via appcompat)`
 - `com.google.android.material:material:1.9.0`
 
-> **注意**：Glide 在 `:banner` 中是 `compileOnly`，宿主项目必须自行引入 Glide 运行时依赖，详见 [第五节·使用默认图片加载器](#51-使用默认图片加载器glide)。
+> **注意**：Glide 在 `:banner` 中是 `compileOnly`，宿主项目必须自行引入 Glide 运行时依赖，详见 [第六节·使用默认图片加载器](#61-使用默认图片加载器glide)。
 
 ---
 
@@ -50,7 +50,7 @@
 **步骤 1**：在宿主项目根目录 `settings.gradle` 中引入 `:banner` 模块：
 
 ```gradle
-include ':app', ':banner'
+include ':banner'
 project(':banner').projectDir = new File('path/to/AndroidBanner/banner')
 ```
 
@@ -89,9 +89,9 @@ dependencies {
 }
 ```
 
-### 方式三：JitPack 远程依赖（推荐，跨项目最便捷）
+### 方式三：JitPack 远程依赖（需先验证构建）
 
-> 仓库已配置 `maven-publish` 插件和 [jitpack.yml](../jitpack.yml)，支持 JitPack 自动构建。
+> 仓库已配置 `maven-publish` 插件和 [jitpack.yml](../jitpack.yml)。JitPack 会在首次请求 Git Tag、提交或分支版本时按需构建；只有构建成功后，远程依赖才可使用。
 
 **步骤 1**：在宿主项目根目录 `settings.gradle` 的 `dependencyResolutionManagement.repositories` 中添加 JitPack 仓库：
 
@@ -110,7 +110,8 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    implementation 'com.github.Atian10:AndroidBanner:1.1.0'
+    // 版本应对应远端 Git Tag；以下坐标仍需以 JitPack 实际构建结果为准
+    implementation 'com.github.Atian10:AndroidBanner:v1.1.0'
 }
 ```
 
@@ -120,26 +121,25 @@ JitPack 发布的 AAR 会携带 `api` 依赖（AndroidX 系列），但 Glide �
 
 ```gradle
 dependencies {
-    implementation 'com.github.Atian10:AndroidBanner:1.1.0'
+    implementation 'com.github.Atian10:AndroidBanner:v1.1.0'
     // 如使用 GlideImageLoader，需额外引入 Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 }
 ```
 
-> **版本说明**：`1.1.0` 对应 GitHub 的 `v1.1.0` Tag（待发布）。发布新版本时：
+> **版本说明（2026-08-26 检查）**：远端已存在 `v1.1.0` Tag，但 JitPack 构建 API 尚无该版本的成功构建记录。该 Tag 也不包含当前工作区相对该 Tag 新增的修复及 `gradle-wrapper.jar`，因此不能把上面的坐标视为已经验证可用。发布后续版本时：
 > 1. 修改 [banner/gradle.properties](../banner/gradle.properties) 中 `VERSION_NAME` 为新版本
 > 2. 提交并推送代码
 > 3. 在 GitHub 创建对应 Tag（如 `v1.1.0`）并推送
-> 4. JitPack 会自动触发构建，状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看
+> 4. 首次请求该版本时由 JitPack 按需构建，并以构建结果及宿主项目的实际依赖解析作为可用证据
 
-> ⚠️ **v1.1.0 破坏性变更**：`BannerViewHolder.bind()` 方法签名新增 `BannerConfig config` 参数。自定义 ViewHolder 的用户需适配，详见[第 6.5 节](#65-标题样式控制v110-新增)。
+> ⚠️ **v1.1.0 破坏性变更**：`BannerViewHolder.bind()` 方法签名新增 `BannerConfig config` 参数。自定义 ViewHolder 的用户需适配，详见[第 6.4 节](#64-自定义-item-布局)。
 
-**JitPack 优势**：
-- 无需账号审核（Maven Central 需要）
-- 无需手动发布命令
-- 打 Tag 即发布，版本管理清晰
-- 支持分支构建（`com.github.Atian10:AndroidBanner:main-SNAPSHOT`）
+**JitPack 使用边界**：
+- 可按 Git Tag、提交或分支版本构建，无需预先上传 AAR
+- 首次依赖请求可能触发构建，Tag 存在不等于构建已经成功
+- 支持分支快照（如 `com.github.Atian10:AndroidBanner:main-SNAPSHOT`），但快照内容可能变化
 
 ---
 
@@ -172,7 +172,7 @@ bannerList.add(new BannerBean("https://example.com/3.jpg", "标题3", "https://l
 
 ### 4.3 配置并启动
 
-在 Activity / Fragment 中链式调用：
+以下是 Activity 中的链式调用：
 
 ```java
 BannerConfig config = new BannerConfig.Builder()
@@ -190,8 +190,10 @@ binding.bannerView.setConfig(config)
             // 处理点击
             Toast.makeText(this, "点击了第" + (position + 1) + "条", Toast.LENGTH_SHORT).show();
         })
-        .start(this);  // 传入 LifecycleOwner，自动感知生命周期
+        .start(this);  // Activity 作为 LifecycleOwner
 ```
+
+Fragment 应在 `onViewCreated` 之后把最后一行改为 `.start(getViewLifecycleOwner())`。不要直接传入 Fragment 自身，否则 Fragment 的 View 销毁后，旧 BannerView 仍可能被 Fragment 生命周期持有。
 
 ### 4.4 完成
 
@@ -211,13 +213,22 @@ binding.bannerView.setConfig(config)
 | `setOnBannerClickListener(OnBannerClickListener<IBannerData>)` | 设置点击监听 | `BannerView` |
 | `setViewHolderFactory(BannerViewHolderFactory<IBannerData>)` | 设置自定义布局工厂 | `BannerView` |
 | `start(LifecycleOwner)` | 启动（首次） | `void` |
-| `restart(LifecycleOwner)` | 重启（切换配置后调用） | `void` |
+| `restart(LifecycleOwner)` | 使用当前数据和配置重启，并从第一项开始 | `void` |
+| `restartKeepPosition(LifecycleOwner)` | 使用当前数据和配置重启；数据条数不变时保持当前真实索引 | `void` |
 
-**链式调用顺序**：
+**首次启动的链式调用顺序**：
 
 ```
 setConfig → [setViewHolderFactory] → setData → setImageLoader → setOnBannerClickListener → start
 ```
+
+**运行时重新配置的调用顺序**：
+
+```
+setConfig → setData → setImageLoader → [setOnBannerClickListener] → restart / restartKeepPosition
+```
+
+`setData(...)` 会重建 Adapter，因此图片加载器和点击监听需要重新设置。`restart(...)` 从第一项开始；`restartKeepPosition(...)` 适用于数据条数不变的配置切换，此时保持当前真实索引。若数据条数或顺序改变，位置或业务对象不保证保持不变。
 
 ### 5.2 BannerConfig 配置项
 
@@ -225,8 +236,8 @@ setConfig → [setViewHolderFactory] → setData → setImageLoader → setOnBan
 
 | 配置项 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| `interval(long)` | long | `3000L` | 轮播间隔（毫秒） |
-| `loop(boolean)` | boolean | `true` | 是否无限循环 |
+| `interval(long)` | long | `3000L` | 轮播间隔（毫秒），必须大于 0 |
+| `loop(boolean)` | boolean | `true` | 是否启用超大区间循环；关闭后手动滑动为有限列表，但自动播放到末尾仍会回到第一项 |
 | `indicatorType(IndicatorType)` | IndicatorType | `DOT` | 指示器类型 |
 | `indicatorVisible(boolean)` | boolean | `true` | 是否显示指示器 |
 | `cardStyle(CardStyle)` | CardStyle | `NORMAL` | 卡片样式 |
@@ -356,8 +367,14 @@ public class MyBannerViewHolder extends BannerViewHolder<IBannerData> {
     }
 
     @Override
-    public void bind(IBannerData data, int position, IImageLoader imageLoader) {
+    public void bind(IBannerData data, int position, IImageLoader imageLoader,
+                     BannerConfig config) {
         tvTitle.setText(data.getTitle());
+        if (config != null) {
+            tvTitle.setVisibility(config.isTitleVisible() ? View.VISIBLE : View.GONE);
+            tvTitle.setBackgroundColor(config.getTitleBgColor());
+            tvTitle.setTextColor(config.getTitleTextColor());
+        }
         if (imageLoader != null) {
             imageLoader.loadImage(itemView.getContext(), data.getImageUrl(), ivImage);
         }
@@ -419,8 +436,12 @@ BannerConfig config = new BannerConfig.Builder()
 BannerConfig newConfig = new BannerConfig.Builder()
         .titleVisible(false)
         .build();
+
 binding.bannerView.setConfig(newConfig)
-        .restart(this);
+        .setData(bannerList)
+        .setImageLoader(new GlideImageLoader())
+        // 如需点击回调，应在这里重新调用 setOnBannerClickListener(...)
+        .restartKeepPosition(this);
 ```
 
 > **注意**：`titleVisible` / `titleBgColor` / `titleTextColor` 仅对默认 `DefaultBannerViewHolder` 生效。自定义 ViewHolder 需自行在 `bind()` 中读取 `config` 并应用样式。
@@ -429,7 +450,7 @@ binding.bannerView.setConfig(newConfig)
 
 ## 七、生命周期说明
 
-`BannerView` 实现了 `DefaultLifecycleObserver`，传入 `LifecycleOwner`（Activity / Fragment）后自动管理：
+`BannerView` 实现了 `DefaultLifecycleObserver`。Activity 传入自身；Fragment 必须传入 `getViewLifecycleOwner()`，使资源在 `onDestroyView` 时释放：
 
 | 生命周期事件 | BannerView 行为 |
 |-------------|------------------|
@@ -439,14 +460,18 @@ binding.bannerView.setConfig(newConfig)
 
 **宿主无需手动调用** `stop()` / `release()` 等方法。
 
-**切换配置**：如需在运行时切换配置（如切换动画类型），调用 `restart()`：
+**切换配置**：运行时切换配置需要重新调用 `setData(...)`，把新配置传给重建后的 Adapter。数据条数不变时可用 `restartKeepPosition(...)` 保持当前真实索引；从第一项重新开始时使用 `restart(...)`：
 
 ```java
 BannerConfig newConfig = new BannerConfig.Builder()
         .animType(AnimType.FLIP)
         .build();
+
 binding.bannerView.setConfig(newConfig)
-        .restart(this);  // 会停止当前轮播并重新启动
+        .setData(bannerList)
+        .setImageLoader(new GlideImageLoader())
+        // 如需点击回调，应在这里重新调用 setOnBannerClickListener(...)
+        .restartKeepPosition(this);  // Activity；Fragment 使用 getViewLifecycleOwner()
 ```
 
 ---
@@ -489,7 +514,7 @@ binding.bannerView.setConfig(newConfig)
 
 **原因**：`loop=false` 时 `bannerRunnable` 使用 `(currentPosition + 1) % realCount`，到末尾会回绕到第 0 项。
 
-**解决**：这是预期行为。如需"到末尾停止"，可监听 `onPageSelected` 并在到达末尾时调用 `stopAutoPlay`（当前版本未提供公开 `stop` 方法，可后续迭代）。
+**解决**：这是当前实现的预期行为。`loop=false` 只关闭手动滑动的超大区间循环；当前版本没有公开页面切换监听或停止自动播放的方法，因此暂不支持仅通过公开 API 实现“播放到末尾后停止”。若需要该行为，应单独设计并修改公共 API。
 
 ### Q4：R 类找不到（`com.atian.banner.lib.R`）？
 
@@ -512,7 +537,7 @@ binding.bannerView.setConfig(newConfig)
 
 ### Q6：如何监听页面切换事件？
 
-**当前版本**：`OnPageChangeCallback` 在 `BannerView` 内部注册，未对外暴露。如需监听切换事件，可通过 `OnBannerClickListener` 间接获取（点击时返回 `position`）。
+**当前版本**：`OnPageChangeCallback` 在 `BannerView` 内部注册，未对外暴露。`OnBannerClickListener` 只报告点击事件，不能替代页面切换监听。
 
 **后续迭代**：可新增 `setOnPageChangeListener` 公开方法。
 

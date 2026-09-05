@@ -51,7 +51,7 @@ import java.util.Locale;
  * bannerView.setConfig(new BannerConfig.Builder().build())
  *           .setData(list)
  *           .setOnBannerClickListener(listener)
- *           .start(this);
+ *           .start(this); // Activity；Fragment 使用 getViewLifecycleOwner()
  * </pre>
  * </p>
  */
@@ -229,8 +229,9 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
 
     /**
      * 启动 Banner（注册生命周期感知）
-     * <p>宿主 Activity/Fragment 传入自身（实现 {@link LifecycleOwner}），
-     * BannerView 会自动在 onResume 启动轮播、onPause 停止轮播、onDestroy 释放资源</p>
+     * <p>Activity 传入自身；Fragment 应传入 {@code getViewLifecycleOwner()}，
+     * 使 BannerView 在 onDestroyView 对应的生命周期销毁事件中及时释放资源。</p>
+     * <p>BannerView 会自动在 onResume 启动轮播、onPause 停止轮播、onDestroy 释放资源。</p>
      *
      * @param lifecycleOwner 宿主生命周期所有者
      */
@@ -313,7 +314,7 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
      * <pre>
      * bannerView.setConfig(newConfig)
      *           .setData(newList)
-     *           .restart(this);
+     *           .restart(this); // Activity；Fragment 使用 getViewLifecycleOwner()
      * </pre>
      * </p>
      *
@@ -346,7 +347,7 @@ public class BannerView extends FrameLayout implements DefaultLifecycleObserver 
      * <p>使用示例：
      * <pre>
      * bannerView.setConfig(newConfig)
-     *           .restartKeepPosition(this);
+     *           .restartKeepPosition(this); // Activity；Fragment 使用 getViewLifecycleOwner()
      * </pre>
      * </p>
      *

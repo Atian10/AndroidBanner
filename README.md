@@ -1,10 +1,10 @@
 # AndroidBanner
 
-> 轻量级 Android Java 轮播组件，支持无限循环、自动播放、多种动画与指示器，可通过源码/AAR/JitPack 集成
+> 轻量级 Android Java 轮播组件，支持近似无限循环、自动播放、多种动画与指示器，可通过源码或本地 AAR 集成；仓库已包含 JitPack 配置，但远程产物尚未验证
 
 ## 简介
 
-- **Demo 应用**：`app` 模块，演示全部功能
+- **Demo 应用**：`app` 模块，演示主要配置功能
 - **Library 模块**：`banner` 模块，对外提供轮播能力
 
 ## 已实现功能
@@ -12,9 +12,9 @@
 ### 核心轮播
 
 - **基础轮播**：基于 ViewPager2 + RecyclerView.Adapter 实现横向轮播
-- **真无限循环**：loop=true 时 getItemCount 返回 Integer.MAX_VALUE，启动定位 middlePosition，支持双向无限滑动
+- **近似无限循环**：`loop=true` 时 `getItemCount()` 返回 `Integer.MAX_VALUE`，启动后定位到中间区间，提供足够大的双向滑动范围
 - **自动播放**：可配置轮播间隔，onPause 暂停 / onResume 恢复，避免后台耗电
-- **生命周期感知**：通过 DefaultLifecycleObserver 自动感知宿主生命周期，宿主只需调用 `start(LifecycleOwner)` 即可
+- **生命周期感知**：通过 DefaultLifecycleObserver 自动感知宿主生命周期；Activity 传入自身，Fragment 传入 `getViewLifecycleOwner()`
 
 ### 可配置化（BannerConfig Builder 模式）
 
@@ -22,8 +22,8 @@
 
 | 配置项 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| `interval` | long | 3000L | 轮播间隔（毫秒） |
-| `loop` | boolean | true | 是否无限循环 |
+| `interval` | long | 3000L | 轮播间隔（毫秒），必须大于 0 |
+| `loop` | boolean | true | 是否启用超大区间循环；关闭后手动滑动为有限列表，但自动播放到末尾仍会回到第一项 |
 | `indicatorType` | IndicatorType | DOT | 指示器类型（DOT/NUMBER） |
 | `indicatorVisible` | boolean | true | 是否显示指示器 |
 | `cardStyle` | CardStyle | NORMAL | 卡片样式（NORMAL/CARD） |
@@ -101,7 +101,7 @@ AndroidBanner/
 │       ├── view/                              # 视图层
 │       │   └── BannerView.java                # 统一入口 View
 │       ├── adapter/                           # 适配器
-│       │   └── BannerRvAdapter.java           # Banner 适配器（支持无限循环 + 泛型）
+│       │   └── BannerRvAdapter.java           # Banner 适配器（支持近似无限循环 + 泛型）
 │       ├── bean/                              # 数据模型
 │       │   └── BannerBean.java                # 默认数据模型（实现 IBannerData）
 │       ├── config/                            # 配置
@@ -139,7 +139,7 @@ AndroidBanner/
 在宿主项目 `settings.gradle` 中引入 `:banner` 模块：
 
 ```gradle
-include ':app', ':banner'
+include ':banner'
 project(':banner').projectDir = new File('path/to/AndroidBanner/banner')
 ```
 
@@ -163,9 +163,9 @@ dependencies {
 
 将 AAR 放入宿主项目 `libs/` 目录并声明依赖（AAR 不携带传递依赖，需宿主自行提供 AndroidX 等依赖）。
 
-### 方式三：远程依赖（JitPack）
+### 方式三：远程依赖（JitPack，需先验证构建）
 
-仓库已配置 `maven-publish`，支持 JitPack 构建。在 GitHub 打 Tag 后，JitPack 会自动构建并发布。
+仓库已配置 `maven-publish` 和 `jitpack.yml`。JitPack 会在首次请求 Git Tag、提交或分支版本时按需构建；只有构建成功后，远程依赖才可使用。
 
 **步骤 1**：在宿主项目根目录 `settings.gradle` 的 `repositories` 中添加 JitPack：
 
@@ -183,12 +183,12 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    // :banner 模块已声明 VERSION_NAME=1.1.0，JitPack 会按 Tag 构建对应版本
-    implementation 'com.github.Atian10:AndroidBanner:1.1.0'
+    // 版本应对应远端 Git Tag；以下坐标仍需以 JitPack 实际构建结果为准
+    implementation 'com.github.Atian10:AndroidBanner:v1.1.0'
 }
 ```
 
-> **已发布**：`v1.0.7` Tag 已推送，JitPack 构建已通过。`v1.1.0` 待发布（含标题样式控制 API + 触摸恢复修复 + restart 后轮播恢复修复）。构建状态可在 `https://jitpack.io/com/github/Atian10/AndroidBanner` 查看。
+> **版本状态（2026-08-26 检查）**：远端已存在 `v1.1.0` Tag，但 JitPack 构建 API 尚无该版本的成功构建记录。该 Tag 也不包含当前工作区相对该 Tag 新增的修复及 `gradle-wrapper.jar`，因此不能把上面的坐标视为已经验证可用。发布后应以 JitPack 构建结果和宿主项目的实际依赖解析为准。
 
 ## 使用示例
 
@@ -204,8 +204,10 @@ binding.bannerView.setConfig(config)
         .setOnBannerClickListener((position, banner) -> {
             Toast.makeText(this, "点击了第" + (position + 1) + "条", Toast.LENGTH_SHORT).show();
         })
-        .start(this);  // 传入 LifecycleOwner，自动感知生命周期
+        .start(this);  // Activity
 ```
+
+Fragment 应在 `onViewCreated` 之后把最后一行改为 `.start(getViewLifecycleOwner())`，确保 View 销毁时及时停止轮播并释放引用。
 
 ### 自定义配置
 
@@ -241,20 +243,26 @@ BannerConfig config = new BannerConfig.Builder()
 BannerConfig newConfig = new BannerConfig.Builder()
         .animType(AnimType.DEPTH)
         .build();
+
 binding.bannerView.setConfig(newConfig)
-        .restart(this);  // 停止当前轮播并重新启动
+        .setData(bannerList)  // setData 会用新配置重建 Adapter
+        .setImageLoader(new GlideImageLoader())
+        // 如需点击回调，应在这里重新调用 setOnBannerClickListener(...)
+        .restartKeepPosition(this);  // 数据条数不变时保持当前索引；Fragment 使用 getViewLifecycleOwner()
 ```
+
+`setData(...)` 会重建 Adapter，因此图片加载器和点击监听需要重新设置。数据条数不变的配置切换可用 `restartKeepPosition(...)` 保持当前真实索引；若数据条数或顺序改变，位置或业务对象不保证保持不变。若希望从第一项重新开始，使用 `restart(...)`。
 
 > 完整对接说明请参考 [docs/INTEGRATION.md](./docs/INTEGRATION.md)
 
 ## 发布能力现状
 
-### ✅ 已支持：源码依赖 + 本地 AAR + JitPack 远程依赖
+### 当前状态：源码与本地 AAR 已配置，JitPack 待验证
 
 - **源码模块依赖**：直接 `implementation project(':banner')`
-- **本地 AAR**：`./gradlew :banner:assembleRelease` 生成 AAR 文件
-- **JitPack 远程依赖**：已配置 `maven-publish` 插件，打 Tag 后自动发布
-  - 依赖坐标：`com.github.Atian10:AndroidBanner:<tag>`
+- **本地 AAR**：已提供 `./gradlew :banner:assembleRelease` 构建入口，实际产物仍需在可用的 Java/Android 构建环境中验证
+- **JitPack 远程依赖**：已配置 `maven-publish` 和 `jitpack.yml`，但当前版本尚未取得成功构建和宿主依赖解析证据
+  - 待验证坐标：`com.github.Atian10:AndroidBanner:<tag>`
 
 > ⚠️ **v1.1.0 破坏性变更**：`BannerViewHolder.bind()` 方法签名新增 `BannerConfig config` 参数。自定义 ViewHolder 的用户需适配此变更，详见 [INTEGRATION.md](./docs/INTEGRATION.md)。
 

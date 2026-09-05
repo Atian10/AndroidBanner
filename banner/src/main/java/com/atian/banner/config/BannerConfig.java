@@ -1,7 +1,5 @@
 package com.atian.banner.config;
 
-import android.graphics.Color;
-
 import com.atian.banner.enums.AnimType;
 import com.atian.banner.enums.CardStyle;
 import com.atian.banner.enums.IndicatorType;
@@ -111,15 +109,18 @@ public class BannerConfig {
         private boolean titleVisible = true;
 
         /** 默认标题背景色（半透明黑） */
-        private int titleBgColor = Color.parseColor("#80000000");
+        private int titleBgColor = 0x80000000;
 
         /** 默认标题文字颜色（纯白） */
-        private int titleTextColor = Color.WHITE;
+        private int titleTextColor = 0xFFFFFFFF;
 
         /** 默认显示指示器 */
         private boolean indicatorVisible = true;
 
         public Builder interval(long interval) {
+            if (interval <= 0L) {
+                throw new IllegalArgumentException("interval must be greater than 0");
+            }
             this.interval = interval;
             return this;
         }
