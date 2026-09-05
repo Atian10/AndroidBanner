@@ -184,11 +184,11 @@ dependencyResolutionManagement {
 ```gradle
 dependencies {
     // 版本应对应远端 Git Tag；以下坐标仍需以 JitPack 实际构建结果为准
-    implementation 'com.github.Atian10:AndroidBanner:v1.1.1'
+    implementation 'com.github.Atian10:AndroidBanner:v1.1.2'
 }
 ```
 
-> **当前版本**：`v1.1.1` 是补丁版本，包含轮播间隔校验、图片复用清理、CARD 布局修复、单元测试补充和 Gradle Wrapper 恢复。JitPack 坐标只有在对应 Tag 构建成功后才可使用；请以 JitPack 构建结果和宿主项目的实际依赖解析为准。
+> **当前版本**：`v1.1.2` 是发布链路修复版：在保留 `v1.1.1` 功能修复的基础上，将损坏的 POSIX `gradlew` 恢复为 Gradle 7.5 标准脚本，修复 JitPack 在 Gradle 启动前失败的问题。JitPack 坐标只有在对应 Tag 构建成功后才可使用；请以 JitPack 构建结果和宿主项目的实际依赖解析为准。
 
 ## 使用示例
 
