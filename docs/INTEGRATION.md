@@ -111,7 +111,7 @@ dependencyResolutionManagement {
 ```gradle
 dependencies {
     // 版本应对应远端 Git Tag；以下坐标仍需以 JitPack 实际构建结果为准
-    implementation 'com.github.Atian10:AndroidBanner:v1.1.0'
+    implementation 'com.github.Atian10:AndroidBanner:v1.1.1'
 }
 ```
 
@@ -121,17 +121,17 @@ JitPack 发布的 AAR 会携带 `api` 依赖（AndroidX 系列），但 Glide �
 
 ```gradle
 dependencies {
-    implementation 'com.github.Atian10:AndroidBanner:v1.1.0'
+    implementation 'com.github.Atian10:AndroidBanner:v1.1.1'
     // 如使用 GlideImageLoader，需额外引入 Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 }
 ```
 
-> **版本说明（2026-08-26 检查）**：远端已存在 `v1.1.0` Tag，但 JitPack 构建 API 尚无该版本的成功构建记录。该 Tag 也不包含当前工作区相对该 Tag 新增的修复及 `gradle-wrapper.jar`，因此不能把上面的坐标视为已经验证可用。发布后续版本时：
+> **当前版本**：`v1.1.1` 是补丁版本，包含轮播间隔校验、图片复用清理、CARD 布局修复、单元测试补充和 Gradle Wrapper 恢复。JitPack 坐标只有在对应 Tag 构建成功后才可使用。发布后续版本时：
 > 1. 修改 [banner/gradle.properties](../banner/gradle.properties) 中 `VERSION_NAME` 为新版本
 > 2. 提交并推送代码
-> 3. 在 GitHub 创建对应 Tag（如 `v1.1.0`）并推送
+> 3. 在 GitHub 创建对应 Tag（如 `vX.Y.Z`）并推送
 > 4. 首次请求该版本时由 JitPack 按需构建，并以构建结果及宿主项目的实际依赖解析作为可用证据
 
 > ⚠️ **v1.1.0 破坏性变更**：`BannerViewHolder.bind()` 方法签名新增 `BannerConfig config` 参数。自定义 ViewHolder 的用户需适配，详见[第 6.4 节](#64-自定义-item-布局)。
